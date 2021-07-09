@@ -1,0 +1,2 @@
+MARI A = 'Nila'
+PATHIVU(MARI)

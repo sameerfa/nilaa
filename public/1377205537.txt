@@ -1,0 +1,20 @@
+#Try fixing this code
+ FUN scene()
+    VAR A = "Nila"
+    PATHIVU(A)
+    FOR i = 3 TO 4 THEN
+       PATHIVU(A)
+    END
+    action(A)
+END
+
+FUN action(actor)
+    VAR len = 0
+    IF len == 4 THEN
+        PATHIVU("Odi Vaa....")
+    ELSE
+        PATHIVU("Odi poidu...")
+    END
+END
+
+scene()
