@@ -4,17 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('page-title')</title>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/nilaa.png') }}"/>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/nilaa.png') }}"/>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/tailwind.output.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/tailwind.output.css') }}" />
 
     <script
       src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
       defer
     ></script>
-    <script src="assets/js/init-alpine.js"></script>
+    <script src="{{ asset('assets/js/init-alpine.js') }}"></script>
   </head>
   <body>
     <div
@@ -203,11 +205,16 @@
               </li>
           </ul>
           <div class="px-6 my-6">
-            <button
+            <a
+              href="https://github.com/sameerfa/nilaa"
+              target="_blank"
               class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
             >
               GitHub
-            </button>
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+            </a>
           </div>
         </div>
       </aside>
@@ -413,11 +420,16 @@
               </li>
           </ul>
           <div class="px-6 my-6">
-            <button
+            <a
+              href="https://github.com/sameerfa/nilaa/"
+              target="_blank"
               class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
             >
               GitHub
-            </button>
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+            </a>
           </div>
         </div>
       </aside>
@@ -493,13 +505,23 @@
                   aria-label="Account"
                   aria-haspopup="true"
                 >
+                @if(auth()->user())
                   <img
                     class="object-cover w-8 h-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                    src="{{ auth()->user()->image }}"
                     alt=""
                     aria-hidden="true"
                   />
+                @else
+                  <a href='/login'><img
+                    class="object-cover w-8 h-8 rounded-full"
+                    src="{{ asset('assets/img/nilaa.png') }}"
+                    alt=""
+                    aria-hidden="true"
+                  /></a>
+                @endif
                 </button>
+                @if(auth()->user())
                 <template x-if="isProfileMenuOpen">
                   <ul
                     x-transition:leave="transition ease-in duration-150"
@@ -513,7 +535,7 @@
                     <li class="flex">
                       <a
                         class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                        href="#"
+                        href="/profile"
                       >
                         <svg
                           class="w-4 h-4 mr-3"
@@ -535,7 +557,7 @@
                     <li class="flex">
                       <a
                         class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                        href="#"
+                        href="/settings"
                       >
                         <svg
                           class="w-4 h-4 mr-3"
@@ -558,8 +580,12 @@
                     <li class="flex">
                       <a
                         class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                        href="#"
+                        href="{{ route('logout') }}"
+                        onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                       >
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                          @csrf
+                      </form>
                         <svg
                           class="w-4 h-4 mr-3"
                           aria-hidden="true"
@@ -579,6 +605,7 @@
                     </li>
                   </ul>
                 </template>
+              @endif
               </li>
             </ul>
           </div>

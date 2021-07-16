@@ -12,25 +12,24 @@
       <form action="/interpreter" method="post" id="compilecode">
         {{ csrf_field() }}
         {{ method_field('post')}}
+        <input type="text" name="name" placeholder="Program Name" required @if(!empty($pname)) value="{{ $pname }} "@endif class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"><br><br>
         <textarea rows=40 class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         id="editor" name="code" placeholder="Type your code here" required>@if(!empty($txt)) {{ $txt }} @endif</textarea><br>
-        <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" value="Compile" name="compile"
-        onclick="document.getElementById('compilecode').submit()"><br>
-        <input type="text" placeholder="Program Name" class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"><br>
-        <textarea placeholder="Program Description" class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"></textarea><Br>
-        <input type="submit" value="Save" name="save" class="bg-blue-500 rounded">
+        <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" value="Save & Run" name="compile"
+        onclick="document.getElementById('compilecode').submit()">
+        <a href="/interpreter" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >Create New</a><br>
       </form>
     </div>
-    <div class="grid xs:grid-cols-1 my-6 text-gray-700 dark:text-gray-200">
+    <div class="grid xs:grid-cols-1 text-gray-700 dark:text-gray-200">
         @if(!empty($output))
-        <h2 class="font-bold">Output:</h2>
           @if(strpos($output, "["))
-            <code><pre>{{ substr($output, 0, strpos($output, "[")) }}</pre></code>
+            <code class="my-2 rounded bg-black text-white p-6"><pre>{{ substr($output, 0, strpos($output, "[")) }}</pre></code>
           @else
-            <code><pre>{{ $output }}</pre></code>
+            <code class="my-2 rounded bg-black text-white p-6"><pre>{{ $output }}</pre></code>
           @endif
         @else
-          <img src="assets/img/web.svg">
+          <img src="{{ asset('assets/img/idea.svg') }}">
         @endif
     </div>
   </div>

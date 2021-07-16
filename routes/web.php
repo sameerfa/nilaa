@@ -13,7 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\PyInterController;
-Route::resource('/interpreter', PyInterController::class);
-Route::get('/', function(){ return view('welcome'); });
+Route::group(['middleware' => 'auth'], function(){
+  Route::resource('/interpreter', PyInterController::class);
+  Route::resource('/profile', 'App\Http\Controllers\ProfileController');
+  Route::resource('/settings', 'App\Http\Controllers\SettingsController');
+  Route::resource('/myprograms', 'App\Http\Controllers\MyProgramsController');
+});
+
+Route::get('/', 'App\Http\Controllers\MyProgramsController@top');
 Route::get('/docs', function(){ return view('docs'); });
 Route::get('/examples', function(){ return view('examples'); });
+
+Auth::routes();
+
+
+Route::get('login/{provider}', 'App\Http\Controllers\SocialController@redirect');
+Route::get('login/{provider}/callback','App\Http\Controllers\SocialController@Callback');

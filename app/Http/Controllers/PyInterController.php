@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Session;
+use App\Models\Programs;
 
 class PyInterController extends Controller
 {
@@ -17,6 +18,7 @@ class PyInterController extends Controller
 
     public function index()
     {
+      session::forget('file_name');
       return view('interpreter');
     }
 
@@ -40,13 +42,23 @@ class PyInterController extends Controller
     {
       $fname = session::get('file_name');
       if(empty($fname)){
-        session::put('file_name', rand().".txt");
+        session::put('file_name', "codes/".rand().".txt");
         $fname = session::get('file_name');
       }
-      $myfile     = fopen($fname, "w"); // temporary file for induvidual users || save the file and keep it
+
+      $check = Programs::where('file_name',$fname)->first();
+      if(empty($check->id)){
+        $program  = new Programs;
+        $program->user_id = auth()->user()->id;
+        $program->file_name = $fname;
+        $program->name  = $request->input('name');
+        $program->save();
+      }
+      $pname  = $request->input('name');
+
+      $myfile     = fopen($fname, "w");
       $txt = $request->input('code');
-      //$txt = 'RUN("example.myopl")';
-      //$txt = 'VAR A = 5';
+
       fwrite($myfile, $txt);
       fclose($myfile);
 
@@ -56,13 +68,7 @@ class PyInterController extends Controller
       $command  = escapeshellcmd($scriptpy);
       $output   = shell_exec($command);
 
-      /*
-      #run script using process
-      $process = new Process(['C:\Program Files\Python37\python.exe', $scriptpy]);
-      $process->run();
-      */
-
-      return view('interpreter', compact('output','txt'));
+      return view('interpreter', compact('output','txt','pname'));
     }
 
     /**
@@ -73,7 +79,19 @@ class PyInterController extends Controller
      */
     public function show($id)
     {
-        //
+      $program = Programs::where('id',$id)->where('user_id',auth()->user()->id)->first();
+      if(empty($program->id)){ return redirect('404'); }
+      session::put('file_name', $program->file_name);
+      $fname = session::get('file_name');
+      $pname  = $program->name;
+
+      $file     = fopen($fname, "r");
+      while(! feof($file)) {
+        $txt = fgets($file);
+      }
+      fclose($file);
+
+      return view('interpreter', compact('txt','pname'));
     }
 
     /**

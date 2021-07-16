@@ -1,2 +1,0 @@
-MARI a = 0
-PATHIVU(a)
