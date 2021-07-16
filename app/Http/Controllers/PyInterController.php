@@ -17,7 +17,7 @@ class PyInterController extends Controller
 
     public function index()
     {
-      return view('welcome');
+      return view('interpreter');
     }
 
     /**
@@ -62,7 +62,7 @@ class PyInterController extends Controller
       $process->run();
       */
 
-      return view('welcome', compact('output','txt'));
+      return view('interpreter', compact('output','txt'));
     }
 
     /**

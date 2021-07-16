@@ -13,4 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\PyInterController;
-Route::resource('/', PyInterController::class);
+Route::resource('/interpreter', PyInterController::class);
+Route::get('/', function(){ return view('welcome'); });
+Route::get('/docs', function(){ return view('docs'); });
+Route::get('/examples', function(){ return view('examples'); });

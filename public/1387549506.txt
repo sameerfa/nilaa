@@ -1,0 +1,3 @@
+MARI name = "this string is "
+MARI age = "concatenated"
+PATHIVU(name + age)

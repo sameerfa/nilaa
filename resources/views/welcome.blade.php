@@ -1,47 +1,34 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Nilaa V 0.1.16</title>
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    </head>
-    <body class="py-16 bg-gray-200">
-    <h1 class="mb-4 text-4xl text-center text-gray-800 font-bold font-sans">
-      Nilaa <small class="text-xl">Version 0.1.16</small>
-    </h1>
-    <p class="text-sm text-center text-gray-600 font-sans">
-      Compile your first Nila.
-    </p>
-    <div class="px-10 py-16 grid md:grid-cols-2 gap-4">
-      <div>
-        <form action="/" method="post">
-          {{ csrf_field() }}
-          {{ method_field('post')}}
-          <textarea rows=20 class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="my-div" name="code" placeholder="Type your code here" required>@if(!empty($txt)) {{ $txt }} @endif</textarea><br>
-          <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" value="Compile" name="compile">
-        </form>
-      </div>
-      <div>
-        <h2 class="font-bold">Result:</h2>
-        <p>
-          @if(!empty($output))
-            <?php $exp = explode($output, '[<function'); ?>
-            @if(str_contains($output,'[<function') AND !empty($exp[0]))
-              <pre>{{ substr($output, 0, strpos($output, "[<function")) }}</pre>
-            @else
-              @if(substr($output, -2)==0)
-                <pre>{{ substr($output, 0, -2) }}</pre>
-              @else
-                <pre>{{ $output }}</pre>
-              @endif
-            @endif
-          @endif
-        </p>
+@extends('layouts.master')
+@section('page-title') Home | Nilaa @endsection
+@section('container')
+<div class="container px-6 mx-auto grid">
+  <h2
+    class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+  >
+    hey there! I'm <i>Nilaa</i>.
+  </h2>
+    <div
+      class="grid gap-6 mb-8 md:grid-cols-2 min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+    >
+      <div class="grid xs:grid-cols-1"><lottie-player src="https://assets2.lottiefiles.com/packages/lf20_qww4b8ne.json" background="transparent" speed="1" loop autoplay></lottie-player></div>
+      <div class="grid xs:grid-cols-1">
+        <p class="my-6 text-gray-700 dark:text-gray-200"><i>Nilaa</i> is an Open Source Programming language built with Python Interpreter based on the language Tamil/ Tanglish (Tamil written in English).
+          It is built with the intention of helping native language speakers to practise programming concepts in their language, thus reducing
+          the barrier of entry into the world of programming.</p>
+          <code class="my-2 text-gray-700 dark:text-gray-200">
+            PATHIVU("Vanakkam Ulagam")
+            <br>
+            PATHIVU(5*5)
+          </code>
+          <code class="my-2 text-gray-700 dark:text-gray-200">
+            Nilaa >> Vanakkam Ulagam
+            <br>
+            Nila >> 10
+          </code>
       </div>
     </div>
-  </body>
-</html>
+</div>
+@endsection
+@section('scripts')
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+@endsection

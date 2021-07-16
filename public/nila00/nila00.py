@@ -29,25 +29,25 @@ class Error:
 
   def as_string(self):
     result  = f'{self.error_name}: {self.details}\n'
-    result += f'File {self.pos_start.fn}, line {self.pos_start.ln + 1}'
+    result += f'Aram {self.pos_start.fn}, Vari {self.pos_start.ln + 1}'
     result += '\n\n' + string_with_arrows(self.pos_start.ftxt, self.pos_start, self.pos_end)
     return result
 
 class IllegalCharError(Error):
   def __init__(self, pos_start, pos_end, details):
-    super().__init__(pos_start, pos_end, 'Illegal Character', details)
+    super().__init__(pos_start, pos_end, 'Inga idhu varadhu', details)
 
 class ExpectedCharError(Error):
   def __init__(self, pos_start, pos_end, details):
-    super().__init__(pos_start, pos_end, 'Expected Character', details)
+    super().__init__(pos_start, pos_end, 'edhirpaartha kuriyuru', details)
 
 class InvalidSyntaxError(Error):
   def __init__(self, pos_start, pos_end, details=''):
-    super().__init__(pos_start, pos_end, 'Invalid Syntax', details)
+    super().__init__(pos_start, pos_end, 'Thodariyal Thavaru', details)
 
 class RTError(Error):
   def __init__(self, pos_start, pos_end, details, context):
-    super().__init__(pos_start, pos_end, 'Runtime Error', details)
+    super().__init__(pos_start, pos_end, 'Iyangum bodhu pilai', details)
     self.context = context
 
   def as_string(self):
@@ -62,11 +62,11 @@ class RTError(Error):
     ctx = self.context
 
     while ctx:
-      result = f'  File {pos.fn}, line {str(pos.ln + 1)}, in {ctx.display_name}\n' + result
+      result = f'  Aram {pos.fn}, vari {str(pos.ln + 1)}, il {ctx.display_name}\n' + result
       pos = ctx.parent_entry_pos
       ctx = ctx.parent
 
-    return 'Traceback (most recent call last):\n' + result
+    return 'thadam kaanga (anmaiyil kadaisi alaippu):\n' + result
 
 #######################################
 # POSITION
@@ -317,7 +317,7 @@ class Lexer:
       return Token(TT_NE, pos_start=pos_start, pos_end=self.pos), None
 
     self.advance()
-    return None, ExpectedCharError(pos_start, self.pos, "'=' (after '!')")
+    return None, ExpectedCharError(pos_start, self.pos, "'=' (pin '!')")
 
   def make_equals(self):
     tok_type = TT_EQ
@@ -569,7 +569,7 @@ class Parser:
     if not res.error and self.current_tok.type != TT_EOF:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        "Token cannot appear after previous tokens"
+        "Mundhaiya Tokenukku pin innoru token varadhu"
       ))
     return res
 
@@ -640,7 +640,7 @@ class Parser:
     if res.error:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        "Expected 'THIRUMBU', 'THODARU', 'NIRUTHU', 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', int, float, identifier, '+', '-', '(', '[' or 'ILLAI'"
+        "Edhirpaarthadhu 'THIRUMBU', 'THODARU', 'NIRUTHU', 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', enn, pullienn, kuripeyar, '+', '-', '(', '[' or 'ILLAI'"
       ))
     return res.success(expr)
 
@@ -654,7 +654,7 @@ class Parser:
       if self.current_tok.type != TT_IDENTIFIER:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          "Expected identifier"
+          "Edhirpaarthadhu kuripeyar"
         ))
 
       var_name = self.current_tok
@@ -664,7 +664,7 @@ class Parser:
       if self.current_tok.type != TT_EQ:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          "Expected '='"
+          "Edhirpaarthadhu '='"
         ))
 
       res.register_advancement()
@@ -678,7 +678,7 @@ class Parser:
     if res.error:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        "Expected 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', int, float, identifier, '+', '-', '(', '[' or 'ILLAI'"
+        "Edhirpaarthadhu 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', enn, pullienn, kuripeyar, '+', '-', '(', '[' or 'ILLAI'"
       ))
 
     return res.success(node)
@@ -700,7 +700,7 @@ class Parser:
     if res.error:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        "Expected int, float, identifier, '+', '-', '(', '[', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL' or 'ILLAI'"
+        "Edhirpaarthadhu enn, pulli enn, kuripeyar, '+', '-', '(', '[', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL' or 'ILLAI'"
       ))
 
     return res.success(node)
@@ -745,7 +745,7 @@ class Parser:
         if res.error:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
-            "Expected ')', 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', int, float, identifier, '+', '-', '(', '[' or 'ILLAI'"
+            "Edhirpaarthadhu ')', 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', enn, pullienn, kuripeyar, '+', '-', '(', '[' or 'ILLAI'"
           ))
 
         while self.current_tok.type == TT_COMMA:
@@ -758,7 +758,7 @@ class Parser:
         if self.current_tok.type != TT_RPAREN:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
-            f"Expected ',' or ')'"
+            f"Edhirpaarthadhu ',' or ')'"
           ))
 
         res.register_advancement()
@@ -797,7 +797,7 @@ class Parser:
       else:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          "Expected ')'"
+          "Edhirpaarthadhu ')'"
         ))
 
     elif tok.type == TT_LSQUARE:
@@ -827,7 +827,7 @@ class Parser:
 
     return res.failure(InvalidSyntaxError(
       tok.pos_start, tok.pos_end,
-      "Expected int, float, identifier, '+', '-', '(', '[', IF', 'IDHUVARAI', 'APPODHU', 'SEYAL'"
+      "Edhirpaarthadhu enn, pullienn, kuripeyar, '+', '-', '(', '[', IF', 'IDHUVARAI', 'APPODHU', 'SEYAL'"
     ))
 
   def list_expr(self):
@@ -838,7 +838,7 @@ class Parser:
     if self.current_tok.type != TT_LSQUARE:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected '['"
+        f"Edhirpaarthadhu '['"
       ))
 
     res.register_advancement()
@@ -852,7 +852,7 @@ class Parser:
       if res.error:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          "Expected ']', 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', int, float, identifier, '+', '-', '(', '[' or 'ILLAI'"
+          "Edhirpaarthadhu ']', 'MARI', 'ENDRAL', 'IDHUVARAI', 'APPODHU', 'SEYAL', enn, pullienn, kuripeyar, '+', '-', '(', '[' or 'ILLAI'"
         ))
 
       while self.current_tok.type == TT_COMMA:
@@ -865,7 +865,7 @@ class Parser:
       if self.current_tok.type != TT_RSQUARE:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected ',' or ']'"
+          f"Edhirpaarthadhu ',' or ']'"
         ))
 
       res.register_advancement()
@@ -909,7 +909,7 @@ class Parser:
         else:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
-            "Expected 'MUDI'"
+            "Edhirpaarthadhu 'MUDI'"
           ))
       else:
         expr = res.register(self.statement())
@@ -940,7 +940,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, case_keyword):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected '{case_keyword}'"
+        f"Edhirpaarthadhu '{case_keyword}'"
       ))
 
     res.register_advancement()
@@ -952,7 +952,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'ENIL'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'ENIL'"
+        f"Edhirpaarthadhu 'ENIL'"
       ))
 
     res.register_advancement()
@@ -992,7 +992,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'IDHUVARAI'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'IDHUVARAI'"
+        f"Edhirpaarthadhu 'IDHUVARAI'"
       ))
 
     res.register_advancement()
@@ -1001,7 +1001,7 @@ class Parser:
     if self.current_tok.type != TT_IDENTIFIER:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected identifier"
+        f"Edhirpaarthadhu kuripeyar"
       ))
 
     var_name = self.current_tok
@@ -1011,7 +1011,7 @@ class Parser:
     if self.current_tok.type != TT_EQ:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected '='"
+        f"Edhirpaarthadhu '='"
       ))
 
     res.register_advancement()
@@ -1023,7 +1023,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'ILIRUNDHU'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'ILIRUNDHU'"
+        f"Edhirpaarthadhu 'ILIRUNDHU'"
       ))
 
     res.register_advancement()
@@ -1044,7 +1044,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'ENIL'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'ENIL'"
+        f"Edhirpaarthadhu 'ENIL'"
       ))
 
     res.register_advancement()
@@ -1060,7 +1060,7 @@ class Parser:
       if not self.current_tok.matches(TT_KEYWORD, 'MUDI'):
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected 'MUDI'"
+          f"Edhirpaarthadhu 'MUDI'"
         ))
 
       res.register_advancement()
@@ -1079,7 +1079,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'APPODHU'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'APPODHU'"
+        f"Edhirpaarthadhu 'APPODHU'"
       ))
 
     res.register_advancement()
@@ -1091,7 +1091,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'ENIL'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'ENIL'"
+        f"Edhirpaarthadhu 'ENIL'"
       ))
 
     res.register_advancement()
@@ -1107,7 +1107,7 @@ class Parser:
       if not self.current_tok.matches(TT_KEYWORD, 'MUDI'):
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected 'MUDI'"
+          f"Edhirpaarthadhu 'MUDI'"
         ))
 
       res.register_advancement()
@@ -1126,7 +1126,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'SEYAL'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'SEYAL'"
+        f"Edhirpaarthadhu 'SEYAL'"
       ))
 
     res.register_advancement()
@@ -1139,14 +1139,14 @@ class Parser:
       if self.current_tok.type != TT_LPAREN:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected '('"
+          f"Edhirpaarthadhu '('"
         ))
     else:
       var_name_tok = None
       if self.current_tok.type != TT_LPAREN:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected identifier or '('"
+          f"Edhirpaarthadhu kuripeyar or '('"
         ))
 
     res.register_advancement()
@@ -1165,7 +1165,7 @@ class Parser:
         if self.current_tok.type != TT_IDENTIFIER:
           return res.failure(InvalidSyntaxError(
             self.current_tok.pos_start, self.current_tok.pos_end,
-            f"Expected identifier"
+            f"Edhirpaarthadhu kuripeyar"
           ))
 
         arg_name_toks.append(self.current_tok)
@@ -1175,13 +1175,13 @@ class Parser:
       if self.current_tok.type != TT_RPAREN:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected ',' or ')'"
+          f"Edhirpaarthadhu ',' or ')'"
         ))
     else:
       if self.current_tok.type != TT_RPAREN:
         return res.failure(InvalidSyntaxError(
           self.current_tok.pos_start, self.current_tok.pos_end,
-          f"Expected identifier or ')'"
+          f"Edhirpaarthadhu kuripeyar or ')'"
         ))
 
     res.register_advancement()
@@ -1204,7 +1204,7 @@ class Parser:
     if self.current_tok.type != TT_NEWLINE:
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected '->' or NEWLINE"
+        f"Edhirpaarthadhu '->' or NEWLINE"
       ))
 
     res.register_advancement()
@@ -1216,7 +1216,7 @@ class Parser:
     if not self.current_tok.matches(TT_KEYWORD, 'MUDI'):
       return res.failure(InvalidSyntaxError(
         self.current_tok.pos_start, self.current_tok.pos_end,
-        f"Expected 'MUDI'"
+        f"Edhirpaarthadhu 'MUDI'"
       ))
 
     res.register_advancement()
@@ -1369,7 +1369,7 @@ class Value:
     return RTResult().failure(self.illegal_operation())
 
   def copy(self):
-    raise Exception('No copy method defined')
+    raise Exception('Nagal Murai Kaanavillai')
 
   def is_true(self):
     return False
@@ -1378,7 +1378,7 @@ class Value:
     if not other: other = self
     return RTError(
       self.pos_start, other.pos_end,
-      'Illegal operation',
+      'Indha kuri inga varadhu',
       self.context
     )
 
@@ -1410,7 +1410,7 @@ class Number(Value):
       if other.value == 0:
         return None, RTError(
           other.pos_start, other.pos_end,
-          'Division by zero',
+          'Poojiyam moolam vaguthal',
           self.context
         )
 
@@ -1546,7 +1546,7 @@ class List(Value):
       except:
         return None, RTError(
           other.pos_start, other.pos_end,
-          'Element at this index could not be removed from list because index is out of bounds',
+          'Indha kuriyittil ulla uruppai pattiyalil irundhu agattra mudiyavillai, yenenil kuriyeettu ellaikku appaarpattadhu.',
           self.context
         )
     else:
@@ -1567,7 +1567,7 @@ class List(Value):
       except:
         return None, RTError(
           other.pos_start, other.pos_end,
-          'Element at this index could not be retrieved from list because index is out of bounds',
+          'Indha kuriyittil ulla uruppai pattiyalil irundhu agattra mudiyavillai, yenenil kuriyeettu ellaikku appaarpattadhu.',
           self.context
         )
     else:
@@ -1588,7 +1588,7 @@ class List(Value):
 class BaseFunction(Value):
   def __init__(self, name):
     super().__init__()
-    self.name = name or "<anonymous>"
+    self.name = name or "<adaiyalamatra>"
 
   def generate_new_context(self):
     new_context = Context(self.name, self.context, self.pos_start)
@@ -1601,14 +1601,14 @@ class BaseFunction(Value):
     if len(args) > len(arg_names):
       return res.failure(RTError(
         self.pos_start, self.pos_end,
-        f"{len(args) - len(arg_names)} too many args passed into {self}",
+        f"{len(args) - len(arg_names)} miga adhiga alavu alaburukal seyalbaadin ulle anuppa maruppu {self}",
         self.context
       ))
 
     if len(args) < len(arg_names):
       return res.failure(RTError(
         self.pos_start, self.pos_end,
-        f"{len(arg_names) - len(args)} too few args passed into {self}",
+        f"{len(arg_names) - len(args)} miga kuraindha alavu alaburukal seyalbaadin ulle anuppa maruppu {self}",
         self.context
       ))
 
@@ -1656,7 +1656,7 @@ class Function(BaseFunction):
     return copy
 
   def __repr__(self):
-    return f"<function {self.name}>"
+    return f"<seyal {self.name}>"
 
 class BuiltInFunction(BaseFunction):
   def __init__(self, name):
@@ -1677,7 +1677,7 @@ class BuiltInFunction(BaseFunction):
     return res.success(return_value)
 
   def no_visit_method(self, node, context):
-    raise Exception(f'No execute_{self.name} method defined')
+    raise Exception(f'niraivetram_{self.name} murai vilakkam illai')
 
   def copy(self):
     copy = BuiltInFunction(self.name)
@@ -1686,13 +1686,13 @@ class BuiltInFunction(BaseFunction):
     return copy
 
   def __repr__(self):
-    return f"<built-in function {self.name}>"
+    return f"<ullamaindha seyalpaadu {self.name}>"
 
   #####################################
 
   def execute_print(self, exec_ctx):
     print(str(exec_ctx.symbol_table.get('value')))
-    return RTResult().success(Number.null)
+    return RTResult().success(Number) #Number.null
   execute_print.arg_names = ['value']
 
   def execute_print_ret(self, exec_ctx):
@@ -1711,7 +1711,7 @@ class BuiltInFunction(BaseFunction):
         number = int(text)
         break
       except ValueError:
-        print(f"'{text}' must be an integer. Try again!")
+        print(f"'{text}' muzhu-en aaga irukka vendum. Meendum muyarchi sei!")
     return RTResult().success(Number(number))
   execute_input_int.arg_names = []
 
@@ -1747,7 +1747,7 @@ class BuiltInFunction(BaseFunction):
     if not isinstance(list_, List):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "First argument must be list",
+        "Mudhal alaburu pattiyalaaga irukka vendum",
         exec_ctx
       ))
 
@@ -1762,14 +1762,14 @@ class BuiltInFunction(BaseFunction):
     if not isinstance(list_, List):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "First argument must be list",
+        "Mudhal alaburu pattiyalaaga irukka vendum",
         exec_ctx
       ))
 
     if not isinstance(index, Number):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "Second argument must be number",
+        "Irandaam vaadham ennaaga irukka vendum",
         exec_ctx
       ))
 
@@ -1778,7 +1778,7 @@ class BuiltInFunction(BaseFunction):
     except:
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        'Element at this index could not be removed from list because index is out of bounds',
+        'Indha kuriyittil ulla uruppai pattiyalil irundhu agattra mudiyavillai, yenenil kuriyeettu ellaikku appaarpattadhu.',
         exec_ctx
       ))
     return RTResult().success(element)
@@ -1791,14 +1791,14 @@ class BuiltInFunction(BaseFunction):
     if not isinstance(listA, List):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "First argument must be list",
+        "Mudhal alaburu pattiyalaaga irukka vendum",
         exec_ctx
       ))
 
     if not isinstance(listB, List):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "Second argument must be list",
+        "Irandaam vaadham pattiyaalaga irukka vendum",
         exec_ctx
       ))
 
@@ -1812,7 +1812,7 @@ class BuiltInFunction(BaseFunction):
     if not isinstance(list_, List):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "Argument must be list",
+        "alaburu pattiyalaaga vendum",
         exec_ctx
       ))
 
@@ -1825,7 +1825,7 @@ class BuiltInFunction(BaseFunction):
     if not isinstance(fn, String):
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        "Second argument must be string",
+        "Irandaam vaadham saramaaga irukka vendum",
         exec_ctx
       ))
 
@@ -1837,7 +1837,7 @@ class BuiltInFunction(BaseFunction):
     except Exception as e:
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        f"Failed to load script \"{fn}\"\n" + str(e),
+        f"Niral etra tholvi \"{fn}\"\n" + str(e),
         exec_ctx
       ))
 
@@ -1846,7 +1846,7 @@ class BuiltInFunction(BaseFunction):
     if error:
       return RTResult().failure(RTError(
         self.pos_start, self.pos_end,
-        f"Failed to finish executing script \"{fn}\"\n" +
+        f"Niral seyal mudikka tholvi \"{fn}\"\n" +
         error.as_string(),
         exec_ctx
       ))
@@ -1912,7 +1912,7 @@ class Interpreter:
     return method(node, context)
 
   def no_visit_method(self, node, context):
-    raise Exception(f'No visit_{type(node).__name__} method defined')
+    raise Exception(f'paarvaiyidum_{type(node).__name__} murai vilakkam illai')
 
   ###################################
 
@@ -1946,7 +1946,7 @@ class Interpreter:
     if not value:
       return res.failure(RTError(
         node.pos_start, node.pos_end,
-        f"'{var_name}' is not defined",
+        f"'{var_name}' varai arukkapadavillai",
         context
       ))
 
@@ -2193,7 +2193,7 @@ def run(fn, text):
 
   # Run program
   interpreter = Interpreter()
-  context = Context('<program>')
+  context = Context('<niral>')
   context.symbol_table = global_symbol_table
   result = interpreter.visit(ast.node, context)
 
