@@ -64,7 +64,7 @@ class PyInterController extends Controller
 
       $filepath = '"'.$fname.'"';
 
-      $scriptpy = 'nila00\run.py '.$filepath;
+      $scriptpy = 'nila00/run.py '.$filepath;
       $command  = escapeshellcmd($scriptpy);
       $pre_output   = shell_exec('python3 '.$command);
       if(strpos($pre_output, "\n0\n")){
