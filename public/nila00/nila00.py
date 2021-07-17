@@ -1692,7 +1692,7 @@ class BuiltInFunction(BaseFunction):
 
   def execute_print(self, exec_ctx):
     print(str(exec_ctx.symbol_table.get('value')))
-    return RTResult().success(Number) #Number.null
+    return RTResult().success(Number.null) #Number.null
   execute_print.arg_names = ['value']
 
   def execute_print_ret(self, exec_ctx):
