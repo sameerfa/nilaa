@@ -66,7 +66,15 @@ class PyInterController extends Controller
 
       $scriptpy = 'nila00\run.py '.$filepath;
       $command  = escapeshellcmd($scriptpy);
-      $output   = shell_exec($command);
+      $pre_output   = shell_exec($command);
+      if(strpos($pre_output, "\n0\n")){
+        $output = substr($pre_output, 0, strpos($pre_output, "\n0\n"));
+      }else if(strpos($pre_output, "[")){
+        $output = substr($pre_output, 0, strpos($pre_output, "["));
+      }else{
+        $output = $pre_output;
+      }
+
 
       return view('interpreter', compact('output','txt','pname'));
     }

@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function(){
 Route::get('/', 'App\Http\Controllers\MyProgramsController@top');
 Route::get('/docs', function(){ return view('docs'); });
 Route::get('/examples', function(){ return view('examples'); });
+Route::get('/privacy', function(){ return view('privacy'); });
 
 Auth::routes();
 

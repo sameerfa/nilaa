@@ -23,11 +23,7 @@
     </div>
     <div class="grid xs:grid-cols-1 text-gray-700 dark:text-gray-200">
         @if(!empty($output))
-          @if(strpos($output, "["))
-            <code class="my-2 rounded bg-black text-white p-6"><pre>{{ substr($output, 0, strpos($output, "[")) }}</pre></code>
-          @else
             <code class="my-2 rounded bg-black text-white p-6"><pre>{{ $output }}</pre></code>
-          @endif
         @else
           <img src="{{ asset('assets/img/idea.svg') }}">
         @endif
