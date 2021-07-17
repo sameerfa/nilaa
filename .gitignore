@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/nila00/__pycache__
 /public/codes/*.txt
 /storage/*.key
 /vendor
